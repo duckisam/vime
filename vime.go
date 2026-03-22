@@ -1,9 +1,10 @@
 package main
 
 import (
+	"fmt"
+	os "os"
 	tea "github.com/charmbracelet/bubbletea"
 	ui "github.com/duckisam/vime/internal/ui"
-	os "os"
 )
 
 func main(){
@@ -20,5 +21,11 @@ func main(){
 	if _, err := p.Run(); err != nil{
 		panic(err)
 	}
+
+	for _, cmd := range ui.QuitComands{
+		cmd.Run()
+	}
+
+	fmt.Println(ui.LastPath)
 }
 
