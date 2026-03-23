@@ -1,5 +1,4 @@
 package main
-
 import (
 	"fmt"
 	os "os"
@@ -20,10 +19,6 @@ func main(){
 
 	if _, err := p.Run(); err != nil{
 		panic(err)
-	}
-
-	for _, cmd := range ui.QuitComands{
-		cmd.Run()
 	}
 
 	fmt.Println(ui.LastPath)

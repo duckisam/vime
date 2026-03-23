@@ -15,6 +15,7 @@ func FormatDirEntries(entries []fs.DirEntry) []fs.DirEntry{
 		}else{
 			files = append(files, entry)
 		}
+
 	}
 
 	return append(dirs, files...)

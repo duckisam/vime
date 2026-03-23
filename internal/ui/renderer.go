@@ -7,17 +7,22 @@ import (
 	icons "github.com/epilande/go-devicons"
 )
 
-func (m Model) renderStatusBar() string{
+func (m *Model) renderStatusBar() string{
 	barStyle := gloss.NewStyle().
 	Background(gloss.Color("##00000000")).
-	Foreground(gloss.Color("#FAFAFA")).
 	Width(m.width).
 	Padding(0, 1)
 
 	left := m.path
-		if left == "/"{
-			left = ""
-		}
+
+	if left == "/"{
+		left = ""
+	}else if m.mode == ModeCommand{
+		left = m.input.View() 
+	}else if m.commandOutput != ""{
+		left = m.commandOutput
+	}
+
 	right := config.Back + " back  " + config.Confirm + " open  " + config.Quit + " quit"
 
 	gap := max(m.width - gloss.Width(left) - gloss.Width(right) - 2, 0)

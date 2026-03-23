@@ -3,15 +3,22 @@ package ui
 import (
 	"io/fs"
 	"os"
-	"os/exec"
 	"strings"
-
+	"github.com/duckisam/vime/internal/config"
+ 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	gloss "github.com/charmbracelet/lipgloss"
-	"github.com/duckisam/vime/internal/config"
 	explorer "github.com/duckisam/vime/internal/explorer"
 )
 
+var LastPath string
+
+type Mode int
+
+const (
+	ModeNormal Mode = iota
+	ModeCommand
+)
 
 type Model struct{
 	path string
@@ -19,10 +26,10 @@ type Model struct{
 	height int
 	width int
 	cursor int
+	mode Mode
+	input textinput.Model
+	commandOutput string
 }
-
-var QuitComands []exec.Cmd
-var LastPath string
 
 type dirLoadMsg struct{
 	entries []fs.DirEntry
@@ -43,9 +50,13 @@ func (m Model) Init() tea.Cmd{
 }
 
 func New(initPath string) Model {
+	ti := textinput.New()
+	ti.Placeholder = "Type command..."
+	ti.Prompt = ":"
 	return Model{
 		path: initPath,
 		entries: nil,
+		input: ti,
 	}
 }
 
@@ -58,7 +69,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 	case tea.KeyMsg:
-		return HandleInput(msg.String(), m)
+		if m.mode == ModeCommand {
+			return HandleCommandInput(msg, m)
+		}
+		return HandleNormalInput(msg.String(), m)
     }
     return m, nil
 }
