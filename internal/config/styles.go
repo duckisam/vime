@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	selectedColor = "#FFB845" 
+	selectedColor = "#ffb845" 
 	errorColor    = "#f0193e"
 	successColor  = "#3bd723"
 )

@@ -2,6 +2,8 @@ package explorer
 
 import (
 	fs "io/fs"
+	"os"
+	"os/user"
 	"strings"
 )
 
@@ -17,7 +19,6 @@ func FormatDirEntries(entries []fs.DirEntry) []fs.DirEntry{
 		}
 
 	}
-
 	return append(dirs, files...)
 	
 }
@@ -33,4 +34,17 @@ func PathWalkBack(path string) string{
 	path = path[:index + 1]
 	
 	return path 
+}
+
+func ExpandPath(path string) string{
+	if strings.HasPrefix(path, "~"){
+		usr, _ := user.Current()
+		return strings.Replace(path, "~", usr.HomeDir, 1)
+	}
+	return path
+}
+
+func IsVaildOsPath(path string) bool {
+	_, err := os.Stat(ExpandPath(path))
+	return err != nil
 }

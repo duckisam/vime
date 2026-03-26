@@ -1,13 +1,17 @@
 package main
+
 import (
+	"os"
 	"fmt"
-	os "os"
 	tea "github.com/charmbracelet/bubbletea"
 	ui "github.com/duckisam/vime/internal/ui"
 )
 
+const version = "1.0.0"
+
 func main(){
 	initPath, err := os.Getwd()
+
 
 	if err != nil{
 		panic(err)
@@ -20,7 +24,9 @@ func main(){
 	if _, err := p.Run(); err != nil{
 		panic(err)
 	}
+	
+	lastdir, _ := os.Getwd()
 
-	fmt.Println(ui.LastPath)
+	fmt.Println(lastdir)
 }
 

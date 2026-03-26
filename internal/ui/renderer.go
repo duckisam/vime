@@ -9,7 +9,7 @@ import (
 
 func (m *Model) renderStatusBar() string{
 	barStyle := gloss.NewStyle().
-	Background(gloss.Color("##00000000")).
+	Background(gloss.Color("#00000000")).
 	Width(m.width).
 	Padding(0, 1)
 
@@ -17,7 +17,7 @@ func (m *Model) renderStatusBar() string{
 
 	if left == "/"{
 		left = ""
-	}else if m.mode == ModeCommand{
+	}else if m.mode == ModeCommand || m.mode == ModeSearch{
 		left = m.input.View() 
 	}else if m.commandOutput != ""{
 		left = m.commandOutput
@@ -32,11 +32,11 @@ func (m *Model) renderStatusBar() string{
 }
 
 func formatEntry(m Model, entryIndex int) string{
-	icon := icons.IconForPath(m.path + m.entries[entryIndex].Name())
+	icon := icons.IconForPath(m.path + m.entriesToDisplay[entryIndex].Name())
 	iconStyle := gloss.NewStyle().Foreground(gloss.Color(icon.Color))
 	
 	var s strings.Builder
-	entry := m.entries[entryIndex]
+	entry := m.entriesToDisplay[entryIndex]
 	entryString := entry.Name()
 
 	if entry.IsDir(){

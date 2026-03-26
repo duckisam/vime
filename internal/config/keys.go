@@ -11,5 +11,8 @@ const (
 	ChangeDir         = "c"
 	CommandRename     = "r"
 	CommandCopy       = "y"
+	CommandCopyPath   = "Y"
+	FuzzySearch       = "f"
+	NormalSearch      = "/"
 	CommandModeToggle = ":"
 )
