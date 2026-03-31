@@ -1,26 +1,24 @@
 package ui
 
 import (
+	"os/user"
 	"strings"
+
 	gloss "github.com/charmbracelet/lipgloss"
 	config "github.com/duckisam/vime/internal/config"
 	icons "github.com/epilande/go-devicons"
 )
 
-func (m *Model) renderStatusBar() string{
+func (m Model) renderStatusBar() string{
 	barStyle := gloss.NewStyle().
 	Background(gloss.Color("#00000000")).
-	Width(m.width).
-	Padding(0, 1)
+	Width(m.width)
 
 	left := m.path
-
-	if left == "/"{
-		left = ""
-	}else if m.mode == ModeCommand || m.mode == ModeSearch{
-		left = m.input.View() 
-	}else if m.commandOutput != ""{
-		left = m.commandOutput
+	usr, _ := user.Current()
+	
+	if strings.HasPrefix(left, usr.HomeDir){
+		left = strings.Replace(left, usr.HomeDir, "~", 1)
 	}
 
 	right := config.Back + " back  " + config.Confirm + " open  " + config.Quit + " quit"
@@ -29,6 +27,23 @@ func (m *Model) renderStatusBar() string{
 
 	bar := left + strings.Repeat(" ", gap) + right
 	return barStyle.Render(bar)
+}
+
+func (m Model) renderCommandBar() string{
+	var toDisplay string
+	switch m.mode{
+	case ModeNormal:
+		toDisplay = ""
+	default:
+		toDisplay = m.input.View()
+	}
+
+	if m.commandOutput != ""{
+		toDisplay = m.commandOutput
+	}
+	
+
+	return toDisplay
 }
 
 func formatEntry(m Model, entryIndex int) string{

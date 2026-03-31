@@ -1,9 +1,10 @@
 package explorer
 
 import (
-	fs "io/fs"
+	"io/fs"
 	"os"
 	"os/user"
+	"path/filepath"
 	"strings"
 )
 
@@ -41,10 +42,16 @@ func ExpandPath(path string) string{
 		usr, _ := user.Current()
 		return strings.Replace(path, "~", usr.HomeDir, 1)
 	}
-	return path
+
+	abs, err := filepath.Abs(path)
+	if err != nil{
+		return path
+	}
+
+	return abs
 }
 
 func IsVaildOsPath(path string) bool {
 	_, err := os.Stat(ExpandPath(path))
-	return err != nil
+	return err == nil
 }

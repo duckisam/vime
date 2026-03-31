@@ -18,3 +18,7 @@ var (
 )
 
 
+const (
+	DisplayEntryOffset = 1 + 2
+
+)
