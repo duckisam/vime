@@ -103,7 +103,6 @@ vime
 
 | Key | Action |
 |-----|--------|
-| `y` | Copy selected file |
 | `Y` | Copy selected file path to clipboard |
 | `r` | Rename selected file or directory |
 | `d` | Create a new directory |
