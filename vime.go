@@ -7,7 +7,7 @@ import (
 	ui "github.com/duckisam/vime/internal/ui"
 )
 
-const version = "1.0.0"
+const version = "1.0.1"
 
 func main(){
 	initPath, err := os.Getwd()

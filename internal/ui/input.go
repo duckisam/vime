@@ -1,9 +1,9 @@
 package ui
 
-import ( 
-	"os" 
-	"errors" 
-	"os/exec" 
+import (
+	"errors"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -32,11 +32,9 @@ func HandleNormalInput(input string, m Model) (tea.Model, tea.Cmd) {
 			if m.cursor < m.viewOffset {
 				m.viewOffset = max(m.viewOffset - 1, 0)
 			}
-
-		if m.viewOffset > m.cursor{
-			m.viewOffset = m.cursor
-		}
-
+			if m.viewOffset > m.cursor{
+				m.viewOffset = m.cursor
+			}
 
 		}
 
@@ -48,6 +46,7 @@ func HandleNormalInput(input string, m Model) (tea.Model, tea.Cmd) {
 			m.filter = ""
 			cmd = loadDir(m.path)
 		}
+
 	case config.Back:
 		if !(m.path == "/") {
 			m.path = explorer.PathWalkBack(m.path)
@@ -56,6 +55,7 @@ func HandleNormalInput(input string, m Model) (tea.Model, tea.Cmd) {
 			m.filter = ""
 			cmd = loadDir(m.path)
 		}
+
 	case config.Confirm:
 		m.filter = ""
 		if m.entriesToDisplay[m.cursor].IsDir() {
@@ -69,6 +69,7 @@ func HandleNormalInput(input string, m Model) (tea.Model, tea.Cmd) {
 				return nil
 			})
 		}
+
 	case config.CommandCopyPath:
 		m.commandOutput, _ = ParseCommand("copy_string "+m.path+m.entriesToDisplay[m.cursor].Name(), m)
 
@@ -96,11 +97,20 @@ func HandleNormalInput(input string, m Model) (tea.Model, tea.Cmd) {
 		m.input.Prompt = config.CommandModeToggle
 		m.input.SetValue("remove " + m.path + m.entriesToDisplay[m.cursor].Name())
 
+	case config.CommandRename:
+		m.mode = ModeCommand
+		m.input.Focus()
+		m.input.Prompt = config.CommandModeToggle
+		fileExt := filepath.Ext(m.entriesToDisplay[m.cursor].Name())
+		command := "rename " + m.path + m.entriesToDisplay[m.cursor].Name() + " " + m.path + fileExt
+		m.input.SetValue(command)
+		m.input.SetCursor(len(command) - len(fileExt))
 
 	case config.NormalSearch:
 		m.mode = ModeSearch
 		m.input.Focus()
 		m.input.Prompt = config.NormalSearch
+
 	case config.FuzzySearch:
 		m.mode = ModeSearch
 		m.fzf = true
