@@ -114,7 +114,6 @@ vime
 
 | Key | Action |
 |-----|--------|
-| `e` | Open selected file in the configured editor |
 | `:` | Enter command mode |
 | `/` | Enter normal (substring) search mode |
 | `f` | Enter fuzzy search mode |
